@@ -1,7 +1,7 @@
 import { describe, test, it, expect } from "vitest";
 import { calculateTax } from "../../src/utils/calculateTax";
 
-describe("", () => {
+describe("calculateTax", () => {
   it("should return NaN if arg is not a number", () => {
     const tax = calculateTax();
     expect(tax).toBeNaN();
