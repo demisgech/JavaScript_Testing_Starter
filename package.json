@@ -8,10 +8,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "coverage": "c8 --reporter=html --reporter=text vitest"
   },
   "devDependencies": {
     "@vitest/ui": "^3.0.4",
+    "c8": "^10.1.3",
     "vite": "^5.0.0",
     "vitest": "^1.6.0"
   },
