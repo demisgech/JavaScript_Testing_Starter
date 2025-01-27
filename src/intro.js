@@ -55,6 +55,37 @@ export function digitSum(number) {
   return sum;
 }
 
+// Get all prime numbers
+export function sieveOfEratosthens(n) {
+  // Step 1: Create an array of boolean values
+  let primes = new Array(n + 1).fill(true);
+  primes[0] = primes[1] = false; // 0 and 1 are not prime numbers
+  for (let p = 2; p * p <= n; p++) {
+    if (primes[p]) {
+      // Step 3: Mark multiples of p as not prime
+      for (let i = p * p; i <= n; i += n) {
+        primes[i] = false;
+      }
+    }
+  }
+  // Step 4: Collect all prime numbers
+  let primeNumbers = [];
+  for (let i = 2; i <= n; i++) {
+    if (primes[i]) {
+      primeNumbers.push(i);
+    }
+  }
+
+  return primeNumbers;
+}
+
+export function isPalindrome(value) {
+  if (value === undefined || value === null) return false;
+  // Convert and remove any non alphanumberic character.
+  const originalNumber = value.toString().replace(/[^a-zA-Z0-9]/g, "");
+  let reversedString = originalNumber.split("").reverse().join("");
+  return originalNumber === reversedString;
+}
 export class Point {
   #x;
   #y;

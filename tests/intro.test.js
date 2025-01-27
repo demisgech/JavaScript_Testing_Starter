@@ -6,7 +6,9 @@ import {
   digitSum,
   factorial,
   fizzBuzz,
+  isPalindrome,
   max,
+  sieveOfEratosthens,
   square,
 } from "../src/intro";
 
@@ -110,7 +112,7 @@ describe("add", () => {
     expect(result).toBe(expectedResult);
   });
 
-  it("should return 0 if array is empty", () => {
+  it("should return 0 if array  is empty", () => {
     const numbers = [];
     const result = add(numbers);
     expect(result).toBe(0);
@@ -174,6 +176,36 @@ describe("digitSum", () => {
     expect(result).toBe(-20);
   });
 });
+
+describe("isPalindrome", () => {
+  it("should return false if value is undefind or null.", () => {
+    const result = isPalindrome();
+    expect(result).toBeFalsy();
+  });
+
+  it("should return true if value provided 121 as a number", () => {
+    const result = isPalindrome(121);
+    expect(result).toBeTruthy();
+  });
+  it("should return true if value provided 121 as string.", () => {
+    const result = isPalindrome("121");
+    expect(result).toBeTruthy();
+  });
+
+  it("should return true if value provided -121 as number.", () => {
+    const result = isPalindrome(-121);
+    expect(result).toBeTruthy();
+  });
+  it("should return true if value provided -121 as string.", () => {
+    const result = isPalindrome("-121");
+    expect(result).toBeTruthy();
+  });
+  it("should return true if value provided A man, a plan, a canal: Panama", () => {
+    const result = isPalindrome("a man, a plan, a canal: panama");
+    expect(result).toBeTruthy();
+  });
+});
+
 describe("Point", () => {
   it("should return NaN if the points are not given/ defined", () => {
     const point = new Point();
