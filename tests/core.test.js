@@ -1,6 +1,7 @@
 import { describe, it, test, expect } from "vitest";
 import {
   calculateDiscount,
+  canDrive,
   getCoupons,
   isPriceInRange,
   isValidUsername,
@@ -114,7 +115,7 @@ describe("isPriceInRange", () => {
 describe("isValidUsername", () => {
   const minLength = 5;
   const maxLength = 15;
-  test("should return false username is too short", () => {
+  test("should return false if username is too short", () => {
     expect(isValidUsername("D".repeat(minLength - 1))).toBeFalsy();
   });
   test("should return false if username is too long", () => {
@@ -134,5 +135,34 @@ describe("isValidUsername", () => {
     expect(isValidUsername(undefined)).toBeFalsy();
     expect(isValidUsername(null)).toBeFalsy();
     expect(isValidUsername(1)).toBeFalsy();
+  });
+});
+
+describe("canDrive", () => {
+  it("should return true for valid input", () => {
+    expect(canDrive(16, "US")).toBe(true);
+    expect(canDrive(17, "UK")).toBeTruthy();
+    expect(canDrive(19, "US")).toBe(true);
+  });
+
+  it("should return error for invalid country code", () => {
+    expect(canDrive(17, "ETH")).toMatch(/invalid/i);
+  });
+  it("should return false for underage in the US", () => {
+    expect(canDrive(15, "US")).toBeFalsy();
+  });
+  it("should return true for min age in the US", () => {
+    expect(canDrive(16, "US")).toBe(true);
+  });
+  it("should return false for underage in the UK", () => {
+    expect(canDrive(16, "UK")).toBeFalsy();
+  });
+  it("should return true for min age in the UK", () => {
+    expect(canDrive(17, "US")).toBe(true);
+  });
+
+  it("should handle invalid input", () => {
+    expect(canDrive("16", "U")).toMatch(/invalid/i);
+    expect(canDrive(null, undefined)).toMatch(/invalid/i);
   });
 });
