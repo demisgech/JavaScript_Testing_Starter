@@ -1,10 +1,21 @@
-import { describe, it, test, expect } from "vitest";
+import {
+  describe,
+  it,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  afterAll,
+} from "vitest";
 import {
   calculateDiscount,
   canDrive,
+  fetchData,
   getCoupons,
   isPriceInRange,
   isValidUsername,
+  Stack,
   validateUserInput,
 } from "../src/core.js";
 describe("getCoupons", () => {
@@ -199,5 +210,38 @@ describe("ParametrizedTests:isPriceInRange", () => {
     { scenario: "price > max", price: 101, result: false },
   ])("should return $result when $scenario", ({ price, result }) => {
     expect(isPriceInRange(price, min, max)).toBe(result);
+  });
+});
+
+describe("fetchData", () => {
+  // it("should return an array of numbers", () => {
+  //   const result = fetchData();
+  //   expect(Array.isArray(result)).toBeTruthy();
+  //   expect(result.length).toBeGreaterThan(0);
+  // });
+
+  test("should return a promise that will resolve an array of numbers", async () => {
+    try {
+      const result = await fetchData();
+      // the following two line of codes are not necessary
+      // to check if the Promise is fullfield
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBeGreaterThan(0);
+    } catch (error) {
+      expect(error).toHaveProperty("reason");
+      expect(error.reason).toMatch(/fail/i);
+    }
+  });
+  // Another way to test the above code
+  test("should return a promise that will resolve an array of numbers", () => {
+    fetchData()
+      .then((result) => {
+        expect(Array.isArray(result)).toBe(true);
+        expect(result.length).toBeGreaterThan(0);
+      })
+      .catch((error) => {
+        expect(error).toHaveProperty("reason");
+        expect(error.reason).toMatch(/fail/i);
+      });
   });
 });
