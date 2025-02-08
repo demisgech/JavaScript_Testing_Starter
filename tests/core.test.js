@@ -7,13 +7,16 @@ import {
   afterEach,
   beforeAll,
   afterAll,
+  expectTypeOf,
 } from "vitest";
 import {
   calculateDiscount,
   canDrive,
+  createProduct,
   fetchData,
   getCoupons,
   isPriceInRange,
+  isStrongPassword,
   isValidUsername,
   Stack,
   validateUserInput,
@@ -406,4 +409,101 @@ describe("Stack:SetupAndTeardown", () => {
     expect(stack.isEmpty()).toBe(true);
     expect(stack.size()).toBe(0);
   });
+});
+
+describe("createProduct", () => {
+  const product = { name: "", price: 0 };
+
+  let result;
+  beforeEach(() => {
+    result = createProduct(product);
+  });
+
+  afterEach(() => {
+    result = null;
+  });
+  test("should return an error object when name is invalid", () => {
+    expect(typeof result).toBe("object");
+    expect(result).toHaveProperty("success");
+    expect(result.success).toBe(false);
+
+    expect(result).toHaveProperty("error");
+    expect(typeof result.error).toBe("object");
+
+    expect(result.error).toHaveProperty("code");
+    expect(result.error.code).toMatch(/invalid_name/i);
+
+    expect(result.error).toHaveProperty("message");
+    expect(result.error.message).toMatch(/miss/i);
+  });
+
+  test("should return an error object when price is <= 0", () => {
+    product.name = "a"; // Assum product name is valid here
+    result = createProduct(product);
+    expect(typeof result).toBe("object");
+    expect(result).toHaveProperty("success");
+    expect(result.success).toBe(false);
+
+    expect(result).toHaveProperty("error");
+    expect(typeof result.error).toBe("object");
+
+    expect(result.error).toHaveProperty("code");
+    expect(result.error.code).toMatch(/invalid_price/i);
+
+    expect(result.error).toHaveProperty("message");
+    expect(result.error.message).toMatch(/miss/i);
+  });
+
+  test("should return an object of success for valid input", () => {
+    product.name = "a";
+    product.price = 1;
+    result = createProduct(product);
+
+    // the following two line of code produces the same result
+    expect(typeof result).toBe("object");
+    expectTypeOf(result).toBeObject();
+
+    expectTypeOf(result).toHaveProperty("success");
+    expect(result.success).toBe(true);
+
+    expect(result).not.toHaveProperty("error");
+    expect(result).toHaveProperty("message");
+    expect(result.message).toMatch(/success/i);
+  });
+});
+
+describe("isStrongPassword", () => {
+  const prametrizedTest = test.each([
+    {
+      scenario: "password that has length less than 8",
+      password: "asdf123",
+      result: false,
+    },
+    {
+      scenario: "password that does not contain at least one uppercase letter",
+      password: "asdfwer231",
+      result: false,
+    },
+    {
+      scenario: "password that does not contain at least one lowercase letter",
+      password: "ASFD12334",
+      result: false,
+    },
+    {
+      scenario: "password that does not contain at least one digit",
+      password: "ASFDdfed",
+      result: false,
+    },
+    {
+      scenario: "password that met all criteria",
+      password: "ASFDasdf1234",
+      result: true,
+    },
+  ]);
+  prametrizedTest(
+    "should return $result for $scenario",
+    ({ result, password }) => {
+      expect(isStrongPassword(password)).toBe(result);
+    }
+  );
 });
