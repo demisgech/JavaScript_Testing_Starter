@@ -166,3 +166,38 @@ describe("canDrive", () => {
     expect(canDrive(null, undefined)).toMatch(/invalid/i);
   });
 });
+
+describe("ParametrizedTests", () => {
+  /**
+   * Parametrized tests:
+   * are a way to run the same test multiple times with different sets of input data.
+   */
+
+  it.each([
+    { age: 15, country: "US", result: false },
+    { age: 16, country: "US", result: true },
+    { age: 17, country: "US", result: true },
+    { age: 16, country: "UK", result: false },
+    { age: 17, country: "UK", result: true },
+    { age: 18, country: "UK", result: true },
+  ])(
+    "should return $result for age $age in $country",
+    ({ age, country, result }) => {
+      expect(canDrive(age, country)).toBe(result);
+    }
+  );
+});
+
+describe("ParametrizedTests:isPriceInRange", () => {
+  const min = 0;
+  const max = 100;
+  it.each([
+    { scenario: "price < min", price: -1, result: false },
+    { scenario: "price = min", price: 0, result: true },
+    { scenario: "price between min and max", price: 50, result: true },
+    { scenario: "price = max", price: 100, result: true },
+    { scenario: "price > max", price: 101, result: false },
+  ])("should return $result when $scenario", ({ price, result }) => {
+    expect(isPriceInRange(price, min, max)).toBe(result);
+  });
+});
