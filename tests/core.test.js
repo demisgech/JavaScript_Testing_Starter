@@ -245,3 +245,165 @@ describe("fetchData", () => {
       });
   });
 });
+
+describe("Setup and Treardown", () => {
+  beforeAll(() => {
+    console.log("beforeAll called");
+  });
+
+  beforeEach(() => {
+    console.log("beforeEach called");
+  });
+
+  afterEach(() => {
+    console.log("afterEach called");
+  });
+
+  afterAll(() => {
+    console.log("afterAll called");
+  });
+  it("test case 1", () => {});
+
+  it("test case 2", () => {});
+});
+
+describe("Stack", () => {
+  it("should push(add) an item to the stack", () => {
+    // Arrange
+    const stack = new Stack();
+    //Act
+    stack.push(1);
+    //Assert
+    expect(stack.size()).toBe(1);
+  });
+
+  it("should pop(remove) the top item from the stack and return it", () => {
+    const stack = new Stack();
+
+    stack.push(1);
+    stack.push(2);
+    const poppedItem = stack.pop();
+
+    expect(poppedItem).toBe(2);
+    expect(stack.size()).toBe(1);
+  });
+
+  it("should throw an error when an item is popped if stack is empty", () => {
+    const stack = new Stack();
+    expect(() => stack.pop()).toThrow(/empty/i);
+  });
+
+  it("should peek(return) the top item from the stack without removing it", () => {
+    const stack = new Stack();
+
+    stack.push(1);
+    stack.push(2);
+
+    const peekItem = stack.peek();
+
+    expect(peekItem).toBe(2);
+    expect(stack.size()).toBe(2);
+  });
+
+  it("isEmpty() should return true it the stack is empty", () => {
+    const stack = new Stack();
+    expect(stack.isEmpty()).toBe(true);
+  });
+
+  test("isEmpty() should return false if the stack is not empty", () => {
+    const stack = new Stack();
+    stack.push(1);
+    expect(stack.isEmpty()).toBe(false);
+  });
+
+  test("size() should return the number of items in the stack", () => {
+    const stack = new Stack();
+    expect(stack.size()).toBe(0);
+
+    stack.push(1);
+    stack.push(2);
+    expect(stack.size()).toBe(2);
+
+    stack.pop();
+    expect(stack.size()).toBe(1);
+  });
+
+  it("should clear(remove) all item from the stack", () => {
+    const stack = new Stack();
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+
+    stack.clear();
+
+    expect(stack.isEmpty()).toBe(true);
+    expect(stack.size()).toBe(0);
+  });
+});
+
+describe("Stack:SetupAndTeardown", () => {
+  let stack;
+  beforeEach(() => {
+    stack = new Stack();
+  });
+
+  afterEach(() => {
+    stack = null;
+  });
+  it("push() should add an item to the stack", () => {
+    stack.push(1);
+    expect(stack.size()).toBe(1);
+  });
+
+  it("pop() should remove and return the top item from the stack", () => {
+    stack.push(1);
+    stack.push(2);
+    const poppedItem = stack.pop();
+    expect(poppedItem).toBe(2);
+    expect(stack.size()).toBe(1);
+  });
+
+  test("pop() should throw an error if stack is empty", () => {
+    expect(() => stack.pop()).toThrow(/empty/i);
+  });
+
+  test("peek() should return the top item from the stack without removing it", () => {
+    stack.push(1);
+    stack.push(2);
+    const peekedItem = stack.peek();
+
+    expect(peekedItem).toBe(2);
+    expect(stack.size()).toBe(2);
+  });
+
+  test("peek() should throw an error if stack is empty", () => {
+    expect(() => stack.peek()).toThrow(/empty/i);
+  });
+
+  test("isEmpty() should return true if stack is empty", () => {
+    expect(stack.isEmpty()).toBe(true);
+  });
+
+  test("isEmpty() should return false if the stack is not empty", () => {
+    stack.push(1);
+    expect(stack.isEmpty()).toBe(false);
+  });
+
+  test("size() should return the number of items in the stack", () => {
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+    expect(stack.size()).toBe(3);
+  });
+
+  test("clear() should remove all items from the stack", () => {
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+
+    stack.clear();
+
+    expect(stack.isEmpty()).toBe(true);
+    expect(stack.size()).toBe(0);
+  });
+});
