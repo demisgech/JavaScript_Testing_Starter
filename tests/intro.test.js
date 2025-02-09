@@ -1,4 +1,12 @@
-import { describe, test, it, expect } from "vitest";
+import {
+  describe,
+  test,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  expectTypeOf,
+} from "vitest";
 import {
   Point,
   add,
@@ -177,6 +185,37 @@ describe("digitSum", () => {
   });
 });
 
+describe("sieveOfEratosthens", () => {
+  it("should return typeof array element", () => {
+    const result = sieveOfEratosthens(1);
+    expect(Array.isArray(result)).toBe(true);
+    expectTypeOf(result).toBeArray();
+    expect(result.length).toBeGreaterThanOrEqual(0);
+  });
+
+  it("should return an empty array if input is <= 1", () => {
+    expect(sieveOfEratosthens(0).length).toBe(0);
+    expect(sieveOfEratosthens(-1).length).toBe(0);
+    expect(sieveOfEratosthens(1).length).toBe(0);
+  });
+
+  it("should return an array of at least one element of numbers if input is >= 2", () => {
+    expect(sieveOfEratosthens(2).length).toBeGreaterThanOrEqual(1);
+    expect(sieveOfEratosthens(3).length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("should contains only prime number below 20 if input is 20", () => {
+    expect(sieveOfEratosthens(20)).toEqual([2, 3, 5, 7, 11, 13, 17, 19]);
+    expect(sieveOfEratosthens(20)).toEqual(
+      expect.arrayContaining([5, 2, 7, 3, 11, 19, 17, 13, 19])
+    );
+  });
+
+  it("should contain prime number 997 if input is 1000", () => {
+    expect(sieveOfEratosthens(1000)).toContain(997);
+  });
+});
+
 describe("isPalindrome", () => {
   it("should return false if value is undefind or null.", () => {
     const result = isPalindrome();
@@ -237,5 +276,38 @@ describe("Point", () => {
     const distance = point1.calculateDistance(point2);
 
     expect(distance).toBe(0);
+  });
+});
+
+describe("Point:SetupAndTeardown", () => {
+  let point1;
+  let point2;
+  beforeEach(() => {
+    point1 = new Point(1, 2);
+    point2 = new Point(1, 5);
+  });
+
+  afterEach(() => {
+    point1 = null;
+    point2 = null;
+  });
+
+  it("setX() should set a value for x", () => {
+    point1.setX(1);
+    point2.setX(2);
+    expect(point1.getX()).toBe(1);
+    expect(point2.getX()).toBe(2);
+  });
+
+  it("setY() should set a value for y", () => {
+    point1.setY(1);
+    point2.setY(2);
+    expect(point1.getY()).toBe(1);
+    expect(point2.getY()).toBe(2);
+  });
+
+  it("calculateDistance() should return calculated distance between two points", () => {
+    const distance = point1.calculateDistance(point2);
+    expect(distance).toBe(3);
   });
 });
