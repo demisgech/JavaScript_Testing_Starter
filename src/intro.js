@@ -63,7 +63,7 @@ export function sieveOfEratosthens(n) {
   for (let p = 2; p * p <= n; p++) {
     if (primes[p]) {
       // Step 3: Mark multiples of p as not prime
-      for (let i = p * p; i <= n; i += n) {
+      for (let i = p * p; i <= n; i += p) {
         primes[i] = false;
       }
     }
