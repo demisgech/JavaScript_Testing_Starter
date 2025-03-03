@@ -12,11 +12,13 @@ import {
   getPriceInCurrency,
   getShippingInfo,
   renderPage,
+  signUp,
   submitOrder,
 } from "../src/mocking";
 import { getShippingQuote } from "../src/libs/shipping";
 import { trackPageView } from "../src/libs/analytics";
 import { charge } from "../src/libs/payment";
+import { sendEmail } from "../src/libs/email";
 
 describe("test suite", () => {
   /** Mock Function
@@ -138,5 +140,36 @@ describe("submitOrder", () => {
     const result = await submitOrder(order, creditCard);
 
     expect(result).toEqual({ success: true });
+  });
+});
+
+// partial mocking
+vi.mock("../src/libs/email", async (importOriginal) => {
+  const originalModul = await importOriginal();
+  return {
+    ...originalModul,
+    sendEmail: vi.fn(),
+  };
+});
+
+describe("signUp", () => {
+  const email = "name@domain.com";
+  it("should return false if email is not valid", async () => {
+    const result = await signUp("a");
+    expect(result).toBe(false);
+  });
+
+  it("should return true if email is valid", async () => {
+    const result = await signUp(email);
+    expect(result).toBe(true);
+  });
+
+  it("should send the welcom email if email is valid", async () => {
+    await signUp(email);
+    const args = vi.mocked(sendEmail).mock.calls[0];
+
+    expect(sendEmail).toHaveBeenCalled();
+    expect(args[0]).toBe(email);
+    expect(args[1]).toMatch(/welcome/i);
   });
 });
