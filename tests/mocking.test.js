@@ -11,6 +11,7 @@ import { getExchangeRate } from "../src/libs/currency";
 import {
   getPriceInCurrency,
   getShippingInfo,
+  login,
   renderPage,
   signUp,
   submitOrder,
@@ -19,6 +20,7 @@ import { getShippingQuote } from "../src/libs/shipping";
 import { trackPageView } from "../src/libs/analytics";
 import { charge } from "../src/libs/payment";
 import { sendEmail } from "../src/libs/email";
+import security from "../src/libs/security";
 
 describe("test suite", () => {
   /** Mock Function
@@ -171,5 +173,23 @@ describe("signUp", () => {
     expect(sendEmail).toHaveBeenCalled();
     expect(args[0]).toBe(email);
     expect(args[1]).toMatch(/welcome/i);
+  });
+});
+
+// Spying
+// - To motintor the behaviour of functions during test execution.
+// - In English a spy is a person who secretely collect information about others
+// - it is the same in unit testing
+
+describe("login", () => {
+  it("should email the one-time login code", async () => {
+    const email = "name@gmail.com";
+    const spy = vi.spyOn(security, "generateCode");
+    await login(email);
+    const result = spy.mock.results[0];
+    console.log(result);
+    const oneTimeSecurityCode = result.value.toString();
+
+    expect(sendEmail).toHaveBeenCalledWith(email, oneTimeSecurityCode);
   });
 });
